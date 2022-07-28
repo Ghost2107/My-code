@@ -7,6 +7,16 @@ $requete_sql_employe = "SELECT * FROM Employe ";
 
 $execution_requete = $db->query($requete_sql_employe);
 
+if(isset($_GET['id_employe']))
+{
+    $id_employe = $_GET['id_employe'];
+    $req_sql_delete = " DELETE FROM Employe WHERE (id_employe ='".$id_employe."')";
+    $db->query($req_sql_delete);
+
+
+}
+
+
 $req_sql_carte_sim = "SELECT * FROM carte_sim";
 $execution_requete_carte_sim = $db->query($req_sql_carte_sim);
 
@@ -36,16 +46,16 @@ $execution_requete_carte_sim = $db->query($req_sql_carte_sim);
                                 <tr>
 
                                     <th class=" col-sm-1 ">NOM EMPLOYE</th>
-                                    <th class=" col-sm-1">PRENOM</th>
+                                    <th class=" col-sm-2">PRENOM</th>
                                     <th class=" col-sm-1 ">MATRICULE</th>
                                     <th class=" col-sm-1 ">POSTE</th>
                                     <th class=" col-sm-1 ">NOM SERVICE</th>
-                                    <th class=" col-sm-1 ">NUMERO ASSOCIE</th>
+                                    <th class=" col-sm-2 ">NUMERO ASSOCIE</th>
                                     <th class=" col-sm-1 ">MATRICULE TELEPHONE</th>
-                                    <th class=" col-sm-1 ">DATE</th>
+                                    <th class=" col-sm-3 ">DATE</th>
 
 
-                                    <th class=" col-sm-3 ">Action</th>
+                                    <th class=" col-sm-6 ">Action</th>
                                 </tr>
                             </thead>
                             <?php while ($row = $execution_requete->fetch(PDO::FETCH_ASSOC)) : ?>
