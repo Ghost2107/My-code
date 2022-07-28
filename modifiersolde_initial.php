@@ -102,7 +102,7 @@ $execution_req_sql_initial = $db->query($req_sql_solde_initial);
                             </div><!--  /col-xs-5>-->
                             <div class="col-xs-2">
                                 <p>
-                                    <button type="submit" class="btn btn-primary" name="enregistrer">Valider </button>
+                                    <button type="submit" class="btn btn-primary" name="enregistrer_ini">Valider </button>
                                 </p>
 
                             </div>
@@ -120,54 +120,59 @@ $execution_req_sql_initial = $db->query($req_sql_solde_initial);
             </div>
 
         </div>
+    </div>
 
 
 
 
 
 
-        <?php
+    <?php
 
 
 
 
 
 
-        $sql = null;
+    $sql = null;
 
 
 
 
-        if (isset($_POST['enregistrer'])) {
+    if (isset($_POST['enregistrer_ini'])) {
 
 
-            /* $id= $_GET['id_employe'];
+        /* $id= $_GET['id_employe'];
     $service= $_POST['nom_employe'];
     $prenom = $_POST['prenom_employe'];
     $maticule = $_POST['matricule_employe'];
     $poste = $_POST['poste'];
     */
 
-            $id_solde_ini = $_GET['id_solde_ini'];
-            $cartesim = $_POST['id_carte_sim'];
-            $data_initial = $_POST['s_data'];
-            $sms_initial = $_POST['s_sms'];
-            $minute_initiale = $_POST['s_minute'];
-            $credit_initial = $_POST['s_credit'];
-            $dates = $_POST['dates'];
+        $id_solde_ini = $_GET['id_solde_ini'];
+        $cartesim = $_POST['id_carte_sim'];
+        $data_initial = $_POST['s_data'];
+        $sms_initial = $_POST['s_sms'];
+        $minute_initiale = $_POST['s_minute'];
+        $credit_initial = $_POST['s_credit'];
+        $dates = $_POST['dates'];
 
 
-            if (isset($_GET['id_solde_ini']) && isset($_POST['id_carte_sim']) && isset($_POST['s_data']) && isset($_POST['s_sms']) && isset($_POST['s_minute']) && isset($_POST['dates']) && isset($_POST['s_credit'])) {
-                $sql = " UPDATE  Solde_initial SET s_data = . '$data_initial' . ,s_sms= . '$sms_initial' . ,s_minute= . '$minute_initiale' . ,s_credit= . '$credit_restant' . , created_at= . '$dates' .  WHERE  (id_solde_ini = . '$id_solde_ini' .) ";
+        if (isset($_GET['id_solde_ini']) && isset($_POST['id_carte_sim']) && isset($_POST['s_data']) && isset($_POST['s_sms']) && isset($_POST['s_minute']) && isset($_POST['dates']) && isset($_POST['s_credit'])) {
+            $sql = " UPDATE  Solde_initial SET s_data = '$data_initial' , s_sms= '$sms_initial' ,s_minute = '$minute_initiale', s_credit= '$credit_initial' WHERE  (id_solde_ini = '$id_solde_ini') ";
 
-                // utilise exec() car aucun résultat n'est renvoyé
-                $db->exec($sql);
-                //creation de l'enregistrement
-                echo " modifier crée avec success ";
-            } else {
-                echo "  refusé   ";
-            }
+            // utilise exec() car aucun résultat n'est renvoyé
+            $db->exec($sql);
+            //creation de l'enregistrement
+            echo "<div class='alert alert-success'>";
+            echo " Modifié avec success ";
+            echo " </div>";
+        } else {
+            echo "<div class='alert alert-danger'>";
+            echo "  Modification refusé   ";
+            echo " </div>";
         }
+    }
 
 
 

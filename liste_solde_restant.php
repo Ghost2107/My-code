@@ -110,7 +110,7 @@ if (isset($_GET['id_solde_rest'])) {
                                             ?>
                                         </td>
                                         <td>
-                                            <a type="button" class="btn btn-warning" href="liste_solde_restant.php?id_solde_rest=<?php echo $row['id_solde_rest']; ?>&sr_credit=<?php echo $row['sr_credit']; ?>&sr_data=<?php echo $row['sr_data']; ?>&sr_sms= <?php echo $row['sr_sms']; ?>&sr_minute=<?php echo $row['sr_minute']; ?>&dates=<?php echo $row['created_at']; ?>&id_carte_sim=<?php echo $row2['numero_sim']; ?>"><i class="fa fa-edit fa-lg"></i> Editer</a>
+                                            <a type="button" class="btn btn-warning" href="modifiersolde_restant.php?id_solde_rest=<?php echo $row['id_solde_rest']; ?>&sr_credit=<?php echo $row['sr_credit']; ?>&sr_data=<?php echo $row['sr_data']; ?>&sr_sms= <?php echo $row['sr_sms']; ?>&sr_minute=<?php echo $row['sr_minute']; ?>&dates=<?php echo $row['created_at']; ?>&id_carte_sim=<?php echo $assoc_colone_carte_sim['numero_sim']; ?>"><i class="fa fa-edit fa-lg"></i> Editer</a>
                                             <a type="button" class="btn btn-danger" href="liste_solde_restant.php?id_solde_rest=<?php echo $row['id_solde_rest']; ?>"><i class="fa fa-trash fa-lg"></i> Supprimer</a>
                                         </td>
                                     </tr>
