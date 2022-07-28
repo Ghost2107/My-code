@@ -5,6 +5,44 @@ $req_sql = "SELECT * FROM Solde_restant  ";
 
 $execution_req_sql = $db->query($req_sql);
 
+if (isset($_POST['enregistrer'])) {
+
+    $id_solde_rest = $_POST['id_solde_rest'];
+    $cartesim = $_POST['carte_sim'];
+    $data_initial_rest = $_POST['sr_data'];
+    $sms_initial_rest = $_POST['sr_sms'];
+    $minute_initial_rest = $_POST['sr_minute'];
+    $credit_initial_rest = $_POST['sr_credit'];
+    $dates = $_POST['dates'];
+
+    $req_update_sql = null;
+    if (
+        isset($_POST['id_solde_rest']) && isset($_POST['carte_sim']) && isset($_POST['sr_data']) &&
+        isset($_POST['sr_sms']) && isset($_POST['sr_minute']) && isset($_POST['sr_credit']) && isset($_POST['dates'])
+    ) {
+
+        $req_update_sql = " UPDATE  solde_restant  WHERE  (id_solde_rest ='" . $id_solde_rest . "') ";
+
+        // utilise exec() car aucun résultat n'est renvoyé
+        $db->exec($req_update_sql);
+        //creation de l'enregistrement
+        echo " Nouvel enregistrement crée avec success ";
+    } else {
+        echo " Nouvel enregistrement refusé   ";
+    }
+}
+
+$req_sql_del_rest = "SELECT * FROM Solde_restant  ";
+
+$stmt_del_rest = $db->query($req_sql_del_rest);
+
+
+if (isset($_GET['id_solde_rest'])) {
+    $id_solde_rest_delete = $_GET['id_solde_rest'];
+    $req_sql_delete_rest = " DELETE FROM solde_restant WHERE (id_solde_rest ='" . $id_solde_rest_delete . "')";
+    $db->exec($req_sql_delete_rest);
+}
+
 
 ?>
 
@@ -72,8 +110,8 @@ $execution_req_sql = $db->query($req_sql);
                                             ?>
                                         </td>
                                         <td>
-                                            <a type="button" class="btn btn-warning" href="modifiersolde_restant.php?id_solde=<?php echo $row['id_solde_r']; ?>&sr_credit=<?php echo $row['sr_credit']; ?>&sr_data=<?php echo $row['sr_data']; ?>&sr_sms= <?php echo $row['sr_sms']; ?>&sr_minute=<?php echo $row['sr_minute']; ?>&dates=<?php echo $row['created_at']; ?>&id_carte_sim=<?php echo $row2['numero_sim']; ?>"><i class="fa fa-edit fa-lg"></i> Editer</a>
-                                            <a type="button" class="btn btn-danger" href="liste_solde_restant.php?id_solde_r=<?php echo $row['id_solde_r']; ?>"><i class="fa fa-trash fa-lg"></i> Supprimer</a>
+                                            <a type="button" class="btn btn-warning" href="liste_solde_restant.php?id_solde_rest=<?php echo $row['id_solde_rest']; ?>&sr_credit=<?php echo $row['sr_credit']; ?>&sr_data=<?php echo $row['sr_data']; ?>&sr_sms= <?php echo $row['sr_sms']; ?>&sr_minute=<?php echo $row['sr_minute']; ?>&dates=<?php echo $row['created_at']; ?>&id_carte_sim=<?php echo $row2['numero_sim']; ?>"><i class="fa fa-edit fa-lg"></i> Editer</a>
+                                            <a type="button" class="btn btn-danger" href="liste_solde_restant.php?id_solde_rest=<?php echo $row['id_solde_rest']; ?>"><i class="fa fa-trash fa-lg"></i> Supprimer</a>
                                         </td>
                                     </tr>
                                 <?php endwhile; ?>
