@@ -114,6 +114,7 @@ $stmt1 = $db->query($sql1);
             </div>
 
         </div>
+    </div>
 
 
 
@@ -135,10 +136,10 @@ $stmt1 = $db->query($sql1);
                 && isset($_POST['sr_minute']) &&  isset($_POST['dates']) && isset($_POST['sr_credit']) ) 
         {
 
-                $solde_rest_data = htmlspecialchars($_POST['s_data']);
-                $solde_rest_sms = htmlspecialchars($_POST['s_sms']);
-                $solde_rest_minute = htmlspecialchars($_POST['s_minute']);
-                $solde_rest_credit = htmlspecialchars($_POST['s_credit']);
+                $solde_rest_data = htmlspecialchars($_POST['sr_data']);
+                $solde_rest_sms = htmlspecialchars($_POST['sr_sms']);
+                $solde_rest_minute = htmlspecialchars($_POST['sr_minute']);
+                $solde_rest_credit = htmlspecialchars($_POST['sr_credit']);
                 $solde_rest_dates= ($_POST['dates']);
 
                 $regex_solde_rest_data = preg_match_all('/[0-9]+/', $solde_rest_data);
@@ -159,7 +160,7 @@ $stmt1 = $db->query($sql1);
 
 
                 $sql = " INSERT INTO solde_restant (sr_credit,sr_data,sr_sms,sr_minute,id_carte_sim) 
-                VALUES ('$credit_r','$data_r','$sms_r','$minute_r','$cartesim') ";
+                VALUES ('$credit_restant','$data_restant','$sms_restant','$minute_restante','$cartesim') ";
                 // utilise exec() car aucun résultat n'est renvoyé
                 $db->exec($sql);
                 echo "<div class='alert alert-success'>";
