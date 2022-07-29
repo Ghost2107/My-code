@@ -1,28 +1,17 @@
 <?php
 require_once "Connect.php";
 require_once "template.php";
-$sql = "SELECT * FROM Telephone  ";
+$select_all_from_telephone = "SELECT * FROM Telephone  ";
 
-$stmt = $db->query($sql);
+$execution_req = $db->query($select_all_from_telephone);
 
 if (isset($_POST['enregistrer'])) {
     $id = $_POST['id_telephone'];
-    $martelephone = $_POST['marque'];
-    $mattelephone = $_POST['matricule'];
+    $marque_telephone = $_POST['marque'];
+    $matricule_telephone = $_POST['matricule'];
     $sql = null;
 }
 
-$sql = "SELECT * FROM Telephone ";
-
-$stmt = $db->query($sql);
-
-
-
-if (isset($_GET['id_telephone'])) {
-    $id = $_GET['id_telephone'];
-    $req = " delete from Telephone where (id_telephone ='" . $id . "')";
-    $db->exec($req);
-}
 
 ?>
 
@@ -33,13 +22,13 @@ if (isset($_GET['id_telephone'])) {
         <div class="col-lg-12">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                <form class="form-horizontal" data-toggle="validator" role="form" method="get" action="recherche_telephone.php">
+                    <form class="form-horizontal" data-toggle="validator" role="form" method="get" action="recherche_telephone.php">
                         <input type="text" class=" form-control" name="recherche_telephone" id="recherche_telephone">
 
                         <p>
                             <button type="submit" class="btn btn-primary">Recherche </button>
                         </p>
-                 
+
                 </div>
                 <!-- /.panel-heading -->
                 <div class="panel-body">
@@ -54,7 +43,9 @@ if (isset($_GET['id_telephone'])) {
                                     <th class=" col-sm-3 ">Action</th>
                                 </tr>
                             </thead>
-                            <?php while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) : ?>
+                            <?php while ($row = $execution_req->fetch(PDO::FETCH_ASSOC)) : 
+                                
+                                ?>
                                 <tbody>
 
                                     <tr>
@@ -67,8 +58,8 @@ if (isset($_GET['id_telephone'])) {
                                             <?php echo $row['marque']; ?>
 
                                         <td>
-                                            <a type="button" class="btn btn-warning" href="modifiertel.php?id_telephone=<?php echo $row['id_telephone']; ?>&matricule=<?php echo $row['matricule']; ?> &marque =<?php echo $row['marque']; ?> "><i class="fa fa-edit fa-lg"></i> Editer</a>
-                                            <a type="button" class="btn btn-danger" href="liste_telephone.php?id_telephone=<?php echo $row['id_telephone']; ?>"><i class="fa fa-trash fa-lg"></i> Supprimer</a>
+                                            <a type="button" class="btn btn-warning" href="modifiertel.php?id_telephone=<?php echo $row['id_telephone']; ?>&matricule=<?php echo $row['matricule']; ?> &marque =<?php echo $row['marque']; ?> "><i class="fa fa-edit fa-lg"></i> Editer </a>
+                                            <a type="button" class="btn btn-danger" href="deletes.php?id_telephone=<?php echo $row['id_telephone']; ?>"><i class="fa fa-trash fa-lg"></i> Supprimer</a>
                                         </td>
                                     </tr>
                                 <?php endwhile; ?>

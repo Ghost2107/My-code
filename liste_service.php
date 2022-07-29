@@ -9,26 +9,6 @@ $stmt = $db->query($sql);
 
 
 
-if (isset($_GET['id_services'])) {
-
-    if (isset($_POST['recherche_service'])) {
-        array_push($tab, 'Champ vide');
-    } else {
-
-
-
-        $id = $_GET['id_services'];
-        $req = "DELETE FROM Services WHERE (id_services ='" . $id . "')";
-        $db->exec($req);
-    }
-}
-
-if ($tab) {
-    var_dump($tab[0]);
-    exit;
-}
-
-
 
 
 ?>
@@ -82,8 +62,8 @@ if ($tab) {
                                         </td>
                                         <td>
 
-                                            <a type="button" class="btn btn-warning" href="modifier.php?id_services=<?php echo $row['id_services']; ?>&nom_services=<?php echo $row['nom_services']; ?>"><i class="fa fa-edit fa-lg"></i> Editer</a>
-                                            <a type="button" class="btn btn-danger" href="liste_service.php?id_services=<?php echo $row['id_services']; ?>"><i class="fa fa-trash fa-lg"></i> Supprimer</a>
+                                            <a type="button" class="btn btn-warning" href="modifier_service.php?id_services=<?php echo $row['id_services']; ?>&nom_services=<?php echo $row['nom_services']; ?>"><i class="fa fa-edit fa-lg"></i> Editer</a>
+                                            <a type="button" class="btn btn-danger" href="deletes.php?id_services=<?php echo $row['id_services']; ?>"><i class="fa fa-trash fa-lg"></i> Supprimer</a>
                                         </td>
                                     </tr>
                                 <?php endwhile; ?>
@@ -100,4 +80,3 @@ if ($tab) {
         <!-- /.row -->
     </div>
 
-    <?php

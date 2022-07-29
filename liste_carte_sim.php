@@ -6,20 +6,6 @@ $sql = "SELECT * FROM carte_sim ";
 $stmt = $db->query($sql);
 
 
-
-
-
-$sql = "SELECT * FROM carte_sim  ";
-
-$stmt = $db->query($sql);
-
-
-
-if (isset($_GET['id_carte_sim'])) {
-    $id = $_GET['id_carte_sim'];
-    $req = " delete from carte_sim where (id_carte_sim ='" . $id . "')";
-    $db->exec($req);
-}
 ?>
 
 
@@ -29,13 +15,13 @@ if (isset($_GET['id_carte_sim'])) {
         <div class="col-lg-12">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                <form class="form-horizontal" data-toggle="validator" role="form" method="get" action="recherche_carte_sim.php">
+                    <form class="form-horizontal" data-toggle="validator" role="form" method="get" action="recherche_carte_sim.php">
                         <input type="text" class=" form-control" name="recherche_carte_sim" id="recherche_carte_sim">
 
                         <p>
                             <button type="submit" class="btn btn-primary">Recherche </button>
                         </p>
-                   
+
                 </div>
                 <!-- /.panel-heading -->
                 <div class="panel-body">
@@ -63,7 +49,7 @@ if (isset($_GET['id_carte_sim'])) {
 
                                         <td>
                                             <a type="button" class="btn btn-warning" href="modifiercarte.php?id_carte_sim=<?php echo $row['id_carte_sim']; ?>&operateur=<?php echo $row['operateur']; ?>&numero_sim= <?php echo $row['numero_sim']; ?> "><i class="fa fa-edit fa-lg"></i> Editer</a>
-                                            <a type="button" class="btn btn-danger" href="liste_carte_sim.php?id_carte_sim=<?php echo $row['id_carte_sim']; ?>"><i class="fa fa-trash fa-lg"></i> Supprimer</a>
+                                            <a type="button" class="btn btn-danger" href="deletes.php?id_carte_sim=<?php echo $row['id_carte_sim']; ?>"><i class="fa fa-trash fa-lg"></i> Supprimer</a>
                                         </td>
                                     </tr>
                                 <?php endwhile; ?>

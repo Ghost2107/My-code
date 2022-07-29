@@ -32,16 +32,6 @@ if (isset($_POST['enregistrer'])) {
     }
 }
 
-$req_sql_del_rest = "SELECT * FROM Solde_restant  ";
-
-$stmt_del_rest = $db->query($req_sql_del_rest);
-
-
-if (isset($_GET['id_solde_rest'])) {
-    $id_solde_rest_delete = $_GET['id_solde_rest'];
-    $req_sql_delete_rest = " DELETE FROM solde_restant WHERE (id_solde_rest ='" . $id_solde_rest_delete . "')";
-    $db->exec($req_sql_delete_rest);
-}
 
 
 ?>

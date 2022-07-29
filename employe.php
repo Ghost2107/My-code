@@ -152,6 +152,15 @@ $execution_req = $db->query($req_carte_sim);
                                 </div>
 
 
+                                <div class="form-group">
+                                    <label class=" col-sm-4 control-label">DATE:</label>
+                                    <div class="col-sm-8">
+                                        <input type="date" class="form-control" name="dates" id="dates">
+
+                                    </div>
+
+                                </div>
+
 
 
                             </div><!--  /col-xs-5>-->
@@ -194,17 +203,18 @@ $execution_req = $db->query($req_carte_sim);
 
 
         $nom = array_key_exists("nom_employe", $_POST) === true ? $_POST['nom_employe'] : NULL;
-        $prenom = array_key_exists("prenom", $_POST) === true ? $_POST['prenom_employe'] : NULL;
-        $matricule = array_key_exists("matricule", $_POST) === true ? $_POST['matricule_employe'] : NULL;
+        $prenom = array_key_exists("prenom_employe", $_POST) === true ? $_POST['prenom_employe'] : NULL;
+        $matricule = array_key_exists("matricule_employe", $_POST) === true ? $_POST['matricule_employe'] : NULL;
         $poste = array_key_exists("poste", $_POST) === true ? $_POST['poste'] : NULL;
         $id_services = array_key_exists("id_services", $_POST) === true ? $_POST['id_services'] : NULL;
         $num_associe = array_key_exists("num_associe", $_POST) === true ? $_POST['num_associe'] : NULL;
         $id_telephone = array_key_exists("id_telephone", $_POST) === true ? $_POST['id_telephone'] : NULL;
+        $dates = $_POST['dates'];
 
 
         if (
             isset($_POST['nom_employe']) && isset($_POST['prenom_employe'])
-            && isset($_POST['matricule_employe'])
+            && isset($_POST['matricule_employe']) && isset($_POST['dates'])
         ) {
 
             $nom = htmlspecialchars($_POST['nom_employe']);
@@ -289,6 +299,41 @@ $execution_req = $db->query($req_carte_sim);
             }
 
 
+            $dates = htmlspecialchars($_POST['dates']);
+            /*  $dates = $_POST['dates'];
+            $verif_dates = date_parse(($dates));
+            var_dump($verif_dates); */
+            $dates = date('Y-m-d', strtotime($dates));
+
+            if ($_POST['dates'] === $dates) {
+                $operation_date = "Ok";
+                array_push($tab_success, $operation_date);
+            } else {
+
+                array_push($tab_error, 'Date incorrect');
+            }
+
+
+            //bon format à utilser
+            //$date = date('Y-m-d',strtotime($date));
+
+            /*   $format_dates = '%Y  %M  %D  %H:%M:%S ';
+            $verif_dates = strftime($format_dates);
+            if(strptime($verif_dates, $format_dates)){
+
+                echo '<pre>';
+                print_r(strptime($verif_dates, $format_dates));
+                echo '</pre><br>';
+                exit;
+            } */
+            /* $verfif_date = strftime() */
+            /*     if(checkdate($dates)){
+                var_dump($_POST);
+                exit ;
+            } */
+
+
+
             $verif_employe = $db->prepare("SELECT matricule_employe FROM Employe WHERE matricule_employe='$matricule' ");
             $verif_employe->execute();
             $nombre_de_ligne = $verif_employe->rowCount();
@@ -296,18 +341,18 @@ $execution_req = $db->query($req_carte_sim);
             if ($nombre_de_ligne) {
 
                 echo "<div class='alert alert-danger'>";
-                echo "Ce matricule est déjà utilisé ";
+                echo "Ce matricule est déjà utilisé par un employé ";
                 echo " </div>";
                 exit;
             }
         } elseif (!(isset($_POST['nom_employe']) && isset($_POST['prenom_employe'])
-        && isset($_POST['matricule_employe']))) {
+            && isset($_POST['matricule_employe']) && isset($_POST['dates']))) {
 
 
-        echo "<div class='alert alert-danger'>";
-        echo  " Nouvel enregistrement refusé   <br>";
-        echo " </div>";
-    }
+            echo "<div class='alert alert-danger'>";
+            echo  " Nouvel enregistrement refusé   <br>";
+            echo " </div>";
+        }
     }
 
     $nbr = count($tab_error);

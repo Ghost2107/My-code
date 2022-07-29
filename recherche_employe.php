@@ -60,6 +60,9 @@ if (isset($_GET['recherche_employe'])) {
                                     <th class=" col-sm-1 ">POSTE</th>
                                     <th class=" col-sm-1 ">NOM SERVICE</th>
                                     <th class=" col-sm-1 ">MATRICULE TELEPHONE</th>
+                                    <th class=" col-sm-2 ">DATE</th>
+
+
                                     <th class=" col-sm-3 ">Action</th>
                                 </tr>
                             </thead>
@@ -78,7 +81,7 @@ if (isset($_GET['recherche_employe'])) {
                                         <td>
                                             <?php
                                             $recup_nom_poste = $row['poste'];
-                                           /*  $insert_table_employe = "SELECT  Employe(poste) VALUE ('$recup_nom_poste')";
+                                            /*  $insert_table_employe = "SELECT  Employe(poste) VALUE ('$recup_nom_poste')";
 
 
                                             $stmt = $db->query($insert_table_employe);
@@ -106,8 +109,11 @@ if (isset($_GET['recherche_employe'])) {
                                             ?>
                                         </td>
                                         <td>
+                                            <?php echo $row['created_at']; ?>
+                                        </td>
+                                        <td>
                                             <a type="button" class="btn btn-warning" href="modifieremp.php?id_employe=<?php echo $row['id_employe']; ?>&id_telephone=<?php echo $row['id_telephone']; ?>&nom_employe=<?php echo $row['nom_employe']; ?>&prenom_employe=<?php echo $row['prenom_employe']; ?>&matricule_employe= <?php echo $row['matricule_employe']; ?>&poste= <?php echo $row['poste']; ?> "><i class="fa fa-edit fa-lg"></i> Editer</a>
-                                            <a type="button" class="btn btn-danger" href="liste_employe.php?id_employe=<?php echo $row['id_employe']; ?>"><i class="fa fa-trash fa-lg"></i> Supprimer</a>
+                                            <a type="button" class="btn btn-danger" href="deletes.php?id_employe=<?php echo $row['id_employe']; ?>"><i class="fa fa-trash fa-lg"></i> Supprimer</a>
                                         </td>
                                     </tr>
                                 <?php endwhile; ?>

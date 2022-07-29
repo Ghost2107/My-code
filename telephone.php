@@ -185,6 +185,19 @@ require_once "template.php";
             array_push($tab_error, 'Champ vide');
         }
 
+        $verif_telephone = $db->prepare("SELECT matricule FROM telephone WHERE matricule='$matricule' ");
+        $verif_telephone->execute();
+        $nombre_de_ligne = $verif_telephone->rowCount();
+
+        if ($nombre_de_ligne) {
+
+            echo "<div class='alert alert-danger'>";
+            echo "Ce matricule appartient déjà à un telephone ";
+            echo " </div>";
+            exit;
+        }
+
+
 
     }
 

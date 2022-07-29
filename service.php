@@ -98,12 +98,31 @@ require_once "template.php";
 
                 array_push($tab_error, 'Error ! Le nom du service ne doit pas contenir 1 ou plusieurs caractères speciaux ou des espaces vides ou des chiffres');
             }
-        } elseif ($_POST['nom_services'] === " " || $_POST['nom_services'] === "0") {
-            array_push($tab_error, 'Champ vide');
-            /*   $error2 = ' nom de service vide  ';
-                array_push($tab, $error2); */
+        } elseif (!(isset($_POST['nom_employe'])) || empty($_POST['prenom_employe'])) {
+
+
+            echo "<div class='alert alert-danger'>";
+            echo  " Nouvel enregistrement refusé   <br>";
+            echo " </div>";
+        }
+
+        $verif_service = $db->prepare("SELECT nom_services FROM services WHERE nom_services='$service' ");
+        $verif_service->execute();
+        $nombre_de_ligne = $verif_service->rowCount();
+
+        if ($nombre_de_ligne) {
+
+            echo "<div class='alert alert-danger'>";
+            echo "Ce service existe déjà ";
+            echo " </div>";
+            exit;
         }
     }
+
+
+
+
+
     $taille_tableau = count($tab_error);
 
     if ($tab_error) {
@@ -116,7 +135,7 @@ require_once "template.php";
         exit;
     }
     if ($tab_success) {
-        
+
         $insertion_service = "INSERT INTO services (nom_services) VALUE ('$service')";
         $db->exec($insertion_service);
 

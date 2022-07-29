@@ -142,37 +142,66 @@ $execution_req_sql_initial = $db->query($req_sql_solde_initial);
     if (isset($_POST['enregistrer_ini'])) {
 
 
-        /* $id= $_GET['id_employe'];
-    $service= $_POST['nom_employe'];
-    $prenom = $_POST['prenom_employe'];
-    $maticule = $_POST['matricule_employe'];
-    $poste = $_POST['poste'];
-    */
-
-        $id_solde_ini = $_GET['id_solde_ini'];
-        $cartesim = $_POST['id_carte_sim'];
-        $data_initial = $_POST['s_data'];
-        $sms_initial = $_POST['s_sms'];
-        $minute_initiale = $_POST['s_minute'];
-        $credit_initial = $_POST['s_credit'];
-        $dates = $_POST['dates'];
-
-
         if (isset($_GET['id_solde_ini']) && isset($_POST['id_carte_sim']) && isset($_POST['s_data']) && isset($_POST['s_sms']) && isset($_POST['s_minute']) && isset($_POST['dates']) && isset($_POST['s_credit'])) {
-            $sql = " UPDATE  Solde_initial SET s_data = '$data_initial' , s_sms= '$sms_initial' ,s_minute = '$minute_initiale', s_credit= '$credit_initial' WHERE  (id_solde_ini = '$id_solde_ini') ";
 
-            // utilise exec() car aucun résultat n'est renvoyé
-            $db->exec($sql);
-            //creation de l'enregistrement
-            echo "<div class='alert alert-success'>";
-            echo " Modifié avec success ";
-            echo " </div>";
-        } else {
+            $id_solde_ini = $_GET['id_solde_ini'];
+            $cartesim = $_POST['id_carte_sim'];
+            $data_initial = $_POST['s_data'];
+            $sms_initial = $_POST['s_sms'];
+            $minute_initiale = $_POST['s_minute'];
+            $credit_initial = $_POST['s_credit'];
+            $dates = $_POST['dates'];
+
+
+            if (isset($_POST['s_credit']) &&  isset($_POST['s_data']) && isset($_POST['s_sms']) && isset($_POST['s_minute']) &&  isset($_POST['dates']) && isset($_POST['id_carte_sim'])) {
+
+                $solde_ini_data = htmlspecialchars($_POST['s_data']);
+                $solde_ini_sms = htmlspecialchars($_POST['s_sms']);
+                $solde_ini_minute = htmlspecialchars($_POST['s_minute']);
+                $solde_ini_credit = htmlspecialchars($_POST['s_credit']);
+                $solde_ini_dates = ($_POST['dates']);
+
+                $regex_solde_ini_data = preg_match_all('/[0-9]+/', $solde_ini_data);
+                $regex_solde_ini_sms = preg_match_all('/[0-9]+/', $solde_ini_sms);
+                $regex_solde_ini_minute = preg_match_all('/[0-9]+/', $solde_ini_minute);
+                $regex_solde_ini_credit = preg_match_all('/[0-9]+/', $solde_ini_credit);
+
+                $int_positif_data = (is_int($solde_ini_data) || ctype_digit($solde_ini_data)) && ((int)$solde_ini_data > 0);
+                $int_positif_sms = (is_int($solde_ini_sms) || ctype_digit($solde_ini_sms)) && ((int)$solde_ini_sms > 0);
+                $int_positif_minute = (is_int($solde_ini_minute) || ctype_digit($solde_ini_minute)) && ((int)$solde_ini_minute > 0);
+                $int_positif_credit = (is_int($solde_ini_credit) || ctype_digit($solde_ini_credit)) && ((int)$solde_ini_credit > 0);
+
+                if (($regex_solde_ini_data && $int_positif_data) && ($regex_solde_ini_sms && $int_positif_sms) && ($regex_solde_ini_minute && $int_positif_minute) && ($regex_solde_ini_credit && $int_positif_credit)) {
+
+
+                    $sql = " UPDATE  Solde_initial SET s_data = '$data_initial' , s_sms= '$sms_initial' ,s_minute = '$minute_initiale', s_credit= '$credit_initial'
+                   WHERE  (id_solde_ini = '$id_solde_ini') ";
+
+                    // utilise exec() car aucun résultat n'est renvoyé
+                    $db->exec($sql);
+
+                    echo "<div class='alert alert-success'>";
+                    echo " Modifié avec success ";
+                    echo " </div>";
+                } else {
+                    echo "<div class='alert alert-danger'>";
+                    echo "  Modification refusé   ";
+                    echo " </div>";
+                }
+            }
+        } elseif (!(isset($_GET['id_solde_ini']) && isset($_POST['id_carte_sim']) && isset($_POST['s_data']) && isset($_POST['s_sms']) && isset($_POST['s_minute']) && isset($_POST['dates']) && isset($_POST['s_credit']))) {
+
             echo "<div class='alert alert-danger'>";
-            echo "  Modification refusé   ";
+            echo  " Nouvel enregistrement refusé   <br>";
             echo " </div>";
         }
     }
+
+
+
+       
+        
+
 
 
 

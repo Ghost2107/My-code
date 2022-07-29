@@ -120,7 +120,10 @@ require_once "template.php";
                     $result = $sql->rowCount();
                     if ($result) {
 
-                        echo  " le numero existe déja autre numero  svp <br> ";
+                        echo "<div class='alert alert-danger'>";
+                        echo "Ce numero existe déjà";
+                        echo " </div>";
+                        exit;
                     } else {
 
                         $sql = " INSERT INTO carte_sim (operateur,numero_sim) 
@@ -144,6 +147,11 @@ require_once "template.php";
 
                 }
             } else {
+                echo "<div class='alert alert-danger'>";
                 echo "Erreur !";
+                echo " </div>";
+
             }
+           
+
         }

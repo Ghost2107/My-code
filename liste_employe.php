@@ -7,14 +7,40 @@ $requete_sql_employe = "SELECT * FROM Employe ";
 
 $execution_requete = $db->query($requete_sql_employe);
 
-if(isset($_GET['id_employe']))
-{
-    $id_employe = $_GET['id_employe'];
-    $req_sql_delete = " DELETE FROM Employe WHERE (id_employe ='".$id_employe."')";
-    $db->query($req_sql_delete);
+if (isset($_POST['enregistrer'])) {
 
+    $id_employe = $_POST['id_employe'];
+    $nom_employe = $_POST['nom_employe'];
+    $prenom_employe = $_POST['prenom_employe'];
+    $matricule_employe = $_POST['matricule_employe'];
+    $poste = $_POST['poste'];
+    $num_associe = $_POST['num_associe'];
+    $sms_initial = $_POST['s_sms'];
+    $minute_initiale = $_POST['s_minute'];
+    $credit_initial = $_POST['s_credit'];
+    $dates = $_POST['dates'];
 
+    $req_update_sql = null;
+    if (
+        isset($_POST['id_solde']) && isset($_POST['carte_sim']) && isset($_POST['s_data']) &&
+        isset($_POST['s_sms']) && isset($_POST['s_minute']) && isset($_POST['s_credit']) && isset($_POST['dates'])
+    ) {
+
+        $req_update_sql = " UPDATE  solde_initial  WHERE  (id_solde_ini ='" . $id_solde_ini . "') ";
+
+        // utilise exec() car aucun résultat n'est renvoyé
+        $db->exec($req_update_sql);
+        //creation de l'enregistrement
+        echo "<div class='alert alert-success'>";
+        echo " Nouvel enregistrement crée avec success ";
+        echo "</div>";
+    } else {
+        echo "<div class='alert alert-danger'>";
+        echo " Nouvel enregistrement refusé   ";
+        echo "</div>";
+    }
 }
+
 
 
 $req_sql_carte_sim = "SELECT * FROM carte_sim";
@@ -50,7 +76,7 @@ $execution_requete_carte_sim = $db->query($req_sql_carte_sim);
                                     <th class=" col-sm-1 ">MATRICULE</th>
                                     <th class=" col-sm-1 ">POSTE</th>
                                     <th class=" col-sm-1 ">NOM SERVICE</th>
-                                    <th class=" col-sm-2 ">NUMERO ASSOCIE</th>
+                                    <th class=" col-sm-1 ">NUMERO ASSOCIE</th>
                                     <th class=" col-sm-1 ">MATRICULE TELEPHONE</th>
                                     <th class=" col-sm-3 ">DATE</th>
 
@@ -58,7 +84,9 @@ $execution_requete_carte_sim = $db->query($req_sql_carte_sim);
                                     <th class=" col-sm-6 ">Action</th>
                                 </tr>
                             </thead>
-                            <?php while ($row = $execution_requete->fetch(PDO::FETCH_ASSOC)) : ?>
+                            <?php while ($row = $execution_requete->fetch(PDO::FETCH_ASSOC)) :
+
+                            ?>
                                 <tbody>
                                     <tr>
                                         <td>
@@ -122,8 +150,8 @@ $execution_requete_carte_sim = $db->query($req_sql_carte_sim);
 
                                         </td>
                                         <td>
-                                            <a type="button" class="btn btn-warning" href="modifieremp.php?id_employe=<?php echo $row['id_employe']; ?>&id_telephone=<?php echo $row['id_telephone']; ?>&nom_employe=<?php echo $row['nom_employe']; ?>&prenom_employe=<?php echo $row['prenom_employe']; ?>&matricule_employe= <?php echo $row['matricule_employe']; ?>&poste= <?php echo $row['poste']; ?> "><i class="fa fa-edit fa-lg"></i> Editer</a>
-                                            <a type="button" class="btn btn-danger" href="liste_employe.php?id_employe=<?php echo $row['id_employe']; ?>"><i class="fa fa-trash fa-lg"></i> Supprimer</a>
+                                            <a type="button" class="btn btn-warning" href="modifieremp.php?id_employe=<?php echo $row['id_employe']; ?>&id_telephone=<?php echo $row['id_telephone']; ?>&nom_employe=<?php echo $row['nom_employe']; ?>&prenom_employe=<?php echo $row['prenom_employe']; ?>&matricule_employe= <?php echo $row['matricule_employe']; ?>&poste= <?php echo $row['poste']; ?>&id_services= <?php echo $row['id_services']; ?>&id_carte_sim= <?php echo $row['id_carte_sim']; ?> "><i class="fa fa-edit fa-lg"></i> Editer</a>
+                                            <a type="button" class="btn btn-danger" href="deletes.php?id_employe=<?php echo $row['id_employe']; ?>"><i class="fa fa-trash fa-lg"></i> Supprimer</a>
                                         </td>
                                     </tr>
                                 <?php endwhile; ?>
