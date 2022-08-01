@@ -3,14 +3,6 @@ require_once "Connect.php";
 require_once "template.php";
 
 
-
-
-
-
-
-
-
-
 ?>
 
 
@@ -69,14 +61,6 @@ require_once "template.php";
                                     </div>
                                 </div>
 
-                                <div class="form-group">
-
-                                    <div class="col-sm-8">
-
-
-
-                                    </div>
-                                </div>
 
 
 
@@ -104,54 +88,114 @@ require_once "template.php";
     </div>
 
 
-        <?php
+    <?php
+
+    $tab_error = [];
+    $tab_success = [];
+
+    $operateur = array_key_exists("operateur", $_POST) === true ? $_POST['operateur'] : NULL;
+    $numero_sim = array_key_exists("numero_sim", $_POST) === true ? $_POST['numero_sim'] : NULL;
 
 
-        $sql = null;
-        if (isset($_POST['enregistrer'])) {
 
-            if (isset($_POST['operateur']) && isset($_POST['numero_sim']) && !empty($_POST['operateur']) && !empty($_POST['numero_sim'])) {
-                $numero = $_POST['numero_sim'];
-                $operateur = $_POST['operateur'];
-                $num = substr($numero, 0, -8);
-                if (($operateur === "MTN" && $num === "05") || ($operateur === "ORANGE" && $num === "07") || ($operateur === "MOOV" && $num === "01")) {
-                    $sql = $db->prepare("SELECT numero_sim FROM carte_sim WHERE numero_sim='$numero'");
-                    $sql->execute();
-                    $result = $sql->rowCount();
-                    if ($result) {
+    if (isset($_POST['enregistrer'])) {
 
-                        echo "<div class='alert alert-danger'>";
-                        echo "Ce numero existe déjà";
-                        echo " </div>";
-                        exit;
-                    } else {
+        if (isset($_POST['operateur']) && !empty($_POST['operateur']) && isset($_POST['numero_sim']) && !empty($_POST['numero_sim'])) {
 
-                        $sql = " INSERT INTO carte_sim (operateur,numero_sim) 
-            VALUES ('$operateur','$numero') ";
-                        // utilise exec() car aucun résultat n'est renvoyé
-                        $db->exec($sql);
-                        //creation de l'enregistrement
+            $operateur = htmlspecialchars($_POST['operateur']);
 
-                        echo "<div class='alert alert-success'>";
-                        echo  " Nouvel enregistrement crée avec success ";
-                        echo " </div>";
+            $numero_sim = htmlspecialchars($_POST['numero_sim']);
 
+            $taille_numero_sim = strlen($numero_sim);
 
-                        
-                    }
-                } else {
+            if ($taille_numero_sim >= 10 && $taille_numero_sim < 15) {
 
-                    echo "<div class='alert alert-danger'>";
-                    echo  " L'operateur et le numero ne correspondent pas ";
-                    echo " </div>";
+                $operation_taille_numero_sim = "OK inserons dans matricule";
 
-                }
-            } else {
-                echo "<div class='alert alert-danger'>";
-                echo "Erreur !";
-                echo " </div>";
-
+                //creation de l'enregistrement
+                array_push($tab_success, $operation_taille_numero_sim);
             }
-           
 
+            if (is_numeric($numero_sim)) {
+
+
+                $operation_numero_sim = "OK inserons dans carte sim";
+
+                //creation de l'enregistrement
+                array_push($tab_success, $operation_numero_sim);
+            } else {
+
+                array_push($tab_error, "Numero incorrect");
+            }
+
+            $num = substr($numero_sim, 0, -8);
+
+            if (($operateur === "MTN" && $num === "05") || ($operateur === "ORANGE" && $num === "07") || ($operateur === "MOOV" && $num === "01")) {
+
+                $operation_insertion_carte_sim = "operateur et numero correspondent";
+
+                array_push($tab_success, $operation_insertion_carte_sim);
+            } else {
+
+                echo "<div class='alert alert-danger'>";
+                echo  " L'perateur et le numero ne correspondent pas ";
+                echo " </div>";
+                exit;
+            }
+        } elseif (!(isset($_POST['operateur'])  && isset($_POST['numero_sim']))) {
+
+
+
+            echo "<div class='alert alert-danger'>";
+            echo  " Nouvel enregistrement refusé   <br>";
+            echo " </div>";
+            exit;
+        } else {
+            array_push($tab_error, "Numero incorrect");
         }
+
+
+        $select_all_from_carte_sim = $db->prepare("SELECT numero_sim FROM carte_sim WHERE numero_sim='$numero_sim' ");
+        $select_all_from_carte_sim->execute();
+        $nombre_de_ligne = $select_all_from_carte_sim->rowCount();
+
+        if ($nombre_de_ligne) {
+
+            echo "<div class='alert alert-danger'>";
+            echo "Ce numero existe déjà ";
+            echo " </div>";
+            exit;
+        }
+    }
+
+    $nbr = count($tab_error);
+
+
+    if ($tab_error) {
+
+
+        for ($i = 0; $i <= $nbr - 1; $i++) {
+
+
+            echo "<div class='alert alert-danger'>";
+            echo  "<p> $tab_error[$i]</p>";
+            echo " </div>";
+        }
+        exit;
+    }
+
+    if ($tab_success) {
+
+        //la fonction(substr) utilisé ici permet de selectionner un certain nombre de caractère dans une chaine
+
+
+        $insertion_carte_sim = " INSERT INTO carte_sim (operateur,numero_sim) 
+                                               VALUES ('$operateur','$numero_sim') ";
+        // utilise exec() car aucun résultat n'est renvoyé
+        $db->exec($insertion_carte_sim);
+
+        echo "<div class='alert alert-success'>";
+        echo  " Nouvel enregistrement crée avec success ";
+        echo " </div>";
+        exit;
+    }

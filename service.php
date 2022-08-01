@@ -9,7 +9,7 @@ require_once "template.php";
             <h3 align="center" class=" bg-success titre-contact"> AJOUTER UN SERVICE </h3>
 
             <div class="panel panel-primary">
-                <form class="form-horizontal" data-toggle="validator" role="form" method="post">
+                <form class="form-horizontal" data-toggle="validator" role="form" method="post" align="center">
                     <p></p>
                     <div class="row">
                         <div class="col-xs-12">
@@ -19,20 +19,14 @@ require_once "template.php";
 
                             <div class="col-xs-5">
                                 <div class="form-group">
-                                    <label class=" col-sm-4 control-label">NOM SERVICE:</label>
+                                    <label class=" col-sm-4 control-label">NOM DU SERVICE:</label>
                                     <div class="col-sm-8">
                                         <input type="text" class="form-control" name="nom_services" id="nom_services" maxlength="60" required>
                                     </div>
                                 </div>
 
-                                <div class="form-group">
-
-                                    <div class="col-sm-8">
 
 
-
-                                    </div>
-                                </div>
 
 
 
@@ -65,9 +59,10 @@ require_once "template.php";
     <?php
 
 
-    $sql = null;
     $tab_error = [];
     $tab_success = [];
+
+    $service = array_key_exists("nom_services", $_POST) === true ? $_POST['nom_services'] : NULL;
 
     if (isset($_POST['enregistrer'])) {
 
@@ -78,7 +73,7 @@ require_once "template.php";
                 $space = preg_match_all("^[A-Za-z][A-Za-z0-9]*$", $service); */
 
 
-            $service = $_POST['nom_services'];
+            $service = htmlspecialchars($_POST['nom_services']);
 
             //verifie si le nom contient (-) à la fin ou au debut ou seulement (-)
             $number = (preg_match_all("/^([a-z0-9]+-)*[a-z0-9]+$/i", $service));
@@ -98,7 +93,21 @@ require_once "template.php";
 
                 array_push($tab_error, 'Error ! Le nom du service ne doit pas contenir 1 ou plusieurs caractères speciaux ou des espaces vides ou des chiffres');
             }
-        } elseif (!(isset($_POST['nom_employe'])) || empty($_POST['prenom_employe'])) {
+
+            /* $dates = htmlspecialchars($_POST['dates']);
+
+            $dates = date('Y-m-d', strtotime($dates));
+
+            if ($_POST['dates'] === $dates) {
+
+                $operation_date = "Date correct";
+
+                array_push($tab_success, $operation_date);
+            } else {
+
+                array_push($tab_error, 'Date incorrect');
+            } */
+        } elseif (!(isset($_POST['nom_employe'])) || empty($_POST['prenom_employe']) && isset($_POST['dates'])) {
 
 
             echo "<div class='alert alert-danger'>";

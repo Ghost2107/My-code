@@ -51,14 +51,14 @@ $stmt1 = $db->query($sql1);
                                 </div>
 
                                 <div class="form-group">
-                                    <label class=" col-sm-4 control-label"> DATA RESTANT :</label>
+                                    <label class=" col-sm-4 control-label"> DATA :</label>
                                     <div class="col-sm-8">
-                                        <input type="text" class="form-control" name="sr_data" id="sr_data" pattern="[-+]?[0-9]+(\.[0-9]+)?([eE][-+]?[0-9]+)?" title=" exemple de format 55 ou 55.5" required>
+                                        <input type="text" class="form-control" name="sr_data" id="sr_data" pattern="[0-9]+" title=" exemple de format 55 ou 55.5" required>
                                     </div>
                                 </div>
 
                                 <div class="form-group">
-                                    <label class=" col-sm-4 control-label"> SMS RESTANT :</label>
+                                    <label class=" col-sm-4 control-label"> SMS :</label>
                                     <div class="col-sm-8">
                                         <input type="text" class="form-control" name="sr_sms" id="sr_sms" pattern="[0-9]+" title=" exemple de format 55 ou 55.5" required>
                                     </div>
@@ -72,27 +72,21 @@ $stmt1 = $db->query($sql1);
 
 
                                 <div class="form-group">
-                                    <label class=" col-sm-4 control-label"> MINUTE RESTANTE :</label>
+                                    <label class=" col-sm-4 control-label"> MINUTE :</label>
                                     <div class="col-sm-8">
 
-                                        <input type="text" class="form-control" name="sr_minute" id="sr_minute" pattern="[-+]?[0-9]+(\.[0-9]+)?([eE][-+]?[0-9]+)?" title="exemple de farmat 55 ou 55.5 " required>
-
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class=" col-sm-4 control-label">DATE:</label>
-                                    <div class="col-sm-8">
-                                        <input type="date" class="form-control" name="dates" id="dates" required>
+                                        <input type="text" class="form-control" name="sr_minute" id="sr_minute" pattern="[0-9]+" title="exemple de farmat 55 ou 55.5 " required>
 
                                     </div>
                                 </div>
 
                                 <div class="form-group">
-                                    <label class=" col-sm-4 control-label">CREDIT RESTANT:</label>
+                                    <label class=" col-sm-4 control-label">CREDIT :</label>
                                     <div class="col-sm-8">
                                         <input type="text" class="form-control" name="sr_credit" id="sr_credit" pattern="[0-9]+" title=" exemple de format 550" required>
                                     </div>
                                 </div>
+
                             </div><!--  /col-xs-5>-->
                             <div class="col-xs-2">
                                 <p>
@@ -118,44 +112,41 @@ $stmt1 = $db->query($sql1);
 
 
 
-        <?php
-        $sql = null;
-        if (isset($_POST['enregistrer'])) 
-    {
+    <?php
+    $sql = null;
+    if (isset($_POST['enregistrer'])) {
 
 
-            $cartesim = $_POST['id_carte_sim'];
-            $data_restant = $_POST['sr_data'];
-            $sms_restant = $_POST['sr_sms'];
-            $minute_restante = $_POST['sr_minute'];
-            $dates = $_POST['dates'];
-            $credit_restant = $_POST['sr_credit'];
+        $cartesim = $_POST['id_carte_sim'];
+        $data_restant = $_POST['sr_data'];
+        $sms_restant = $_POST['sr_sms'];
+        $minute_restante = $_POST['sr_minute'];
+        $credit_restant = $_POST['sr_credit'];
 
 
-            if (  isset($_POST['sr_data']) && isset($_POST['sr_data']) && isset($_POST['sr_data']) && isset($_POST['sr_sms'])
-                && isset($_POST['sr_minute']) &&  isset($_POST['dates']) && isset($_POST['sr_credit']) ) 
-        {
+        if (
+            isset($_POST['sr_data']) && isset($_POST['sr_data']) && isset($_POST['sr_data']) && isset($_POST['sr_sms'])
+            && isset($_POST['sr_minute']) && isset($_POST['sr_credit'])
+        ) {
 
-                $solde_rest_data = htmlspecialchars($_POST['sr_data']);
-                $solde_rest_sms = htmlspecialchars($_POST['sr_sms']);
-                $solde_rest_minute = htmlspecialchars($_POST['sr_minute']);
-                $solde_rest_credit = htmlspecialchars($_POST['sr_credit']);
-                $solde_rest_dates= ($_POST['dates']);
-
-                $regex_solde_rest_data = preg_match_all('/[0-9]+/', $solde_rest_data);
-                $regex_solde_rest_sms = preg_match_all('/[0-9]+/', $solde_rest_sms);
-                $regex_solde_rest_minute = preg_match_all('/[0-9]+/', $solde_rest_minute);
-                $regex_solde_rest_credit = preg_match_all('/[0-9]+/', $solde_rest_credit);
-
-                $int_positif_rest_data = (is_int($solde_rest_data) || ctype_digit($solde_rest_data)) && ((int)$solde_rest_data > 0 );
-                $int_positif_rest_sms = (is_int($solde_rest_sms) || ctype_digit($solde_rest_sms)) && ((int)$solde_rest_sms > 0 );
-                $int_positif_rest_minute = (is_int($solde_rest_minute) || ctype_digit($solde_rest_minute)) && ((int)$solde_rest_minute > 0 );
-                $int_positif_rest_credit = (is_int($solde_rest_credit) || ctype_digit($solde_rest_credit)) && ((int)$solde_rest_credit > 0 );
+            $solde_rest_data = htmlspecialchars($_POST['sr_data']);
+            $solde_rest_sms = htmlspecialchars($_POST['sr_sms']);
+            $solde_rest_minute = htmlspecialchars($_POST['sr_minute']);
+            $solde_rest_credit = htmlspecialchars($_POST['sr_credit']);
 
 
-                  if ( ($regex_solde_rest_data && $int_positif_rest_data) && ($regex_solde_rest_sms && $int_positif_rest_sms) && ($regex_solde_rest_minute && $int_positif_rest_minute) && ($regex_solde_rest_credit && $int_positif_rest_credit) )
-       
-            {
+            $regex_solde_rest_data = preg_match_all('/[0-9]+/', $solde_rest_data);
+            $regex_solde_rest_sms = preg_match_all('/[0-9]+/', $solde_rest_sms);
+            $regex_solde_rest_minute = preg_match_all('/[0-9]+/', $solde_rest_minute);
+            $regex_solde_rest_credit = preg_match_all('/[0-9]+/', $solde_rest_credit);
+
+            $int_positif_rest_data = (is_int($solde_rest_data) || ctype_digit($solde_rest_data)) && ((int)$solde_rest_data > 0);
+            $int_positif_rest_sms = (is_int($solde_rest_sms) || ctype_digit($solde_rest_sms)) && ((int)$solde_rest_sms > 0);
+            $int_positif_rest_minute = (is_int($solde_rest_minute) || ctype_digit($solde_rest_minute)) && ((int)$solde_rest_minute > 0);
+            $int_positif_rest_credit = (is_int($solde_rest_credit) || ctype_digit($solde_rest_credit)) && ((int)$solde_rest_credit > 0);
+
+
+            if (($regex_solde_rest_data && $int_positif_rest_data) && ($regex_solde_rest_sms && $int_positif_rest_sms) && ($regex_solde_rest_minute && $int_positif_rest_minute) && ($regex_solde_rest_credit && $int_positif_rest_credit)) {
 
 
 
@@ -166,23 +157,15 @@ $stmt1 = $db->query($sql1);
                 echo "<div class='alert alert-success'>";
                 echo " Nouvel enregistrement crée avec succes ";
                 echo " </div>";
-            }     else {
+            } else {
                 echo "<div class='alert alert-danger'>";
                 echo " Nouvel enregistrement refusé ";
                 echo " </div>";
-               
             }
+        } elseif (!(isset($_POST['id_carte_sim']) && isset($_POST['s_data']) && isset($_POST['s_sms'])  && isset($_POST['s_minute']) && isset($_POST['s_credit']))) {
 
-            
-            
-        } elseif ( !(isset( $_POST['id_carte_sim'] ) && isset($_POST['s_data']) && isset($_POST['s_sms'])  && isset($_POST['s_minute']) && isset($_POST['s_credit']) && isset($_POST['dates'])) ) {
-
-                echo "<div class='alert alert-danger'>";
-                echo  " Nouvel enregistrement refusé   <br>";
-                echo " </div>";
-        
-        
-            }
-
-
+            echo "<div class='alert alert-danger'>";
+            echo  " Nouvel enregistrement refusé   <br>";
+            echo " </div>";
+        }
     }

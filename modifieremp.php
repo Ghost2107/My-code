@@ -86,6 +86,7 @@ $execution_req = $db->query($req_carte_sim);
                                     <label class=" col-sm-4 control-label">NOM SERVICE:</label>
                                     <div class="col-sm-8">
                                         <select name="id_services" class="form-control" value="<?php echo $_GET['id_services'];  ?>">
+                                        <option disabled selected value> Selectionner un service </option>
                                             <?php while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) : ?>
 
                                                 <option value="<?php echo $row['id_services']; ?>"><?php echo $row['nom_services']; ?></option>
@@ -105,7 +106,7 @@ $execution_req = $db->query($req_carte_sim);
                                     <label class=" col-sm-4 control-label">NUMERO ASSOCIE:</label>
                                     <div class="col-sm-8">
                                         <select name="numero_associe" class="form-control" value="<?php echo $_GET['id_carte_sim'] ?>">
-
+                                        <option disabled selected value> Selectionner un numéro </option>
 
                                             <?php while ($row = $execution_req->fetch(PDO::FETCH_ASSOC)) : ?>
 
@@ -130,6 +131,7 @@ $execution_req = $db->query($req_carte_sim);
                                     <label class=" col-sm-4 control-label">MATRICULE TELEPHONE:</label>
                                     <div class="col-sm-6">
                                         <select name="id_telephone" class="form-control" value="<?php echo $_GET['matricule']  ?>">
+                                        <option disabled selected value> Selectionner un matricule </option>
                                             <?php while ($row = $stmt1->fetch(PDO::FETCH_ASSOC)) : ?>
 
                                                 <option value="<?php echo $row['id_telephone']; ?>"><?php echo $row['matricule']; ?></option>
@@ -144,15 +146,6 @@ $execution_req = $db->query($req_carte_sim);
                                     </div>
                                 </div>
 
-
-                                <div class="form-group">
-                                    <label class=" col-sm-4 control-label">DATE:</label>
-                                    <div class="col-sm-8">
-                                        <input type="date" class="form-control" name="dates" id="dates">
-
-                                    </div>
-
-                                </div>
 
 
 
@@ -213,11 +206,10 @@ $execution_req = $db->query($req_carte_sim);
 
         $id_telephone = array_key_exists("id_telephone", $_POST) === true ? $_POST['id_telephone'] : NULL;
 
-        $dates = $_POST['dates'];
 
 
 
-        if (isset($_POST['nom_employe']) && isset($_POST['prenom_employe']) && isset($_POST['matricule_employe']) && isset($_POST['dates'])) {
+        if (isset($_POST['nom_employe']) && isset($_POST['prenom_employe']) && isset($_POST['matricule_employe'])) {
 
             //la fonction htmlspecialchars est utilisé pour eviter les attaques xss et les injectons SQL
             $nom_employe = htmlspecialchars($_POST['nom_employe']);
@@ -252,7 +244,7 @@ $execution_req = $db->query($req_carte_sim);
 
             if ($hippen_prenom || $underscore_prenom) {
 
-                if (is_numeric($prenom)) {
+                if (is_numeric($prenom_employe)) {
 
 
 
@@ -292,38 +284,18 @@ $execution_req = $db->query($req_carte_sim);
                 array_push($tab_error, 'Error ! Mauvais format du matricule exemple de format (XYZ1) ');
             }
 
-            $dates = htmlspecialchars($_POST['dates']);
-            /*  $dates = $_POST['dates'];
-                        $verif_dates = date_parse(($dates));
-                            var_dump($verif_dates); */
-            //verifie le format de la date 
-            $dates = date('Y-m-d', strtotime($dates));
 
-            if ($_POST['dates'] === $dates) {
-
-                $operation_date = "Ok";
-
-                array_push($tab_success, $operation_date);
-            } else {
-
-                array_push($tab_error, 'Date incorrect');
-            }
-
-
-            $verif_employe = $db->prepare("SELECT matricule_employe FROM Employe WHERE matricule_employe='$matricule_employe' ");
+            $verif_employe = $db->prepare("SELECT nom_employe FROM Employe WHERE matricule_employe='$matricule_employe' ");
 
             $verif_employe->execute();
 
             $nombre_de_ligne = $verif_employe->rowCount();
 
-            if ($nombre_de_ligne) {
-
-                echo "<div class='alert alert-danger'>";
-                echo "Ce matricule est déjà utilisé ";
-                echo " </div>";
-                exit;
+            if ($nombre_de_ligne > 0) {
+            } else {
+                array_push($tab_error, 'Le matricule ne correspond pas à cet employé');
             }
-        } elseif (!(isset($_POST['nom_employe']) && isset($_POST['prenom_employe']) && isset($_POST['matricule_employe']) && isset($_POST['dates']))) {
+        } elseif (!(isset($_POST['nom_employe']) && isset($_POST['prenom_employe']) && isset($_POST['matricule_employe']))) {
 
 
             echo "<div class='alert alert-danger'>";
@@ -349,7 +321,184 @@ $execution_req = $db->query($req_carte_sim);
         if ($tab_success) {
 
 
-            $update_all_employe = " UPDATE  Employe SET nom_employe= '$nom_employe', prenom_employe='$prenom_employe' ,matricule_employe='$matricule_employe', poste='$poste', id_services='$id_services' ,numero_associe ='$num_associe', id_telephone='$id_telephone'  WHERE  (id_employe ='$id_employe') ";
+
+            if ($id_services === NULL && $id_telephone === NULL && $num_associe === NULL && $poste === NULL) {
+                $insertion_employe_champ_requis = " UPDATE Employe SET nom_employe='$nom_employe',prenom_employe='$prenom_employe',matricule_employe='$matricule_employe' WHERE  (id_employe ='$id_employe') ";
+                // utilise exec() car aucun résultat n'est renvoyé
+                $db->query($insertion_employe_champ_requis);
+    
+                echo "<div class='alert alert-success'>";
+                echo  "<p> Nouvel enregistrement crée avec success </p>";
+                echo " </div>";
+    
+                exit;
+            }
+    
+            if ($poste !== NULL && $id_services === NULL && $id_telephone === NULL && $num_associe === NULL) {
+                $insertion_employe_champ_requis_poste = " UPDATE Employe SET nom_employe='$nom_employe',prenom_employe='$prenom_employe',matricule_employe='$matricule_employe',poste='$poste'  WHERE  (id_employe ='$id_employe')"; 
+                // utilise exec() car aucun résultat n'est renvoyé
+                $db->query($insertion_employe_champ_requis_poste);
+    
+                echo "<div class='alert alert-success'>";
+                echo  "<p> Nouvel enregistrement crée avec success </p>";
+                echo " </div>";
+    
+                exit;
+            }
+    
+    
+            if ($poste !== NULL  &&  $id_services !== NULL &&  $id_telephone === NULL && $num_associe === NULL) {
+                $insertion_employe_champ_requis_poste_service = " UPDATE Employe SET nom_employe='$nom_employe',prenom_employe='$prenom_employe',matricule_employe='$matricule_employe',poste='$poste',id_services='$id_services'  WHERE  (id_employe ='$id_employe')";  
+                // utilise exec() car aucun résultat n'est renvoyé
+                $db->query($insertion_employe_champ_requis_poste_service);
+    
+                echo "<div class='alert alert-success'>";
+                echo  "<p> Nouvel enregistrement crée avec success </p>";
+                echo " </div>";
+    
+                exit;
+            }
+    
+    
+    
+            /*   if ( $id_services !== NULL &&  $id_telephone !== NULL && $num_associe !== NULL && $poste !== NULL ) {
+                $insertion_employe_champ_requis_poste_service = " INSERT INTO Employe (nom_employe,prenom_employe,matricule_employe,poste,id_services) 
+            VALUES ('$nom',' $prenom','$matricule','$poste', '$id_services') ";
+                // utilise exec() car aucun résultat n'est renvoyé
+                $db->exec($insertion_employe_champ_requis_poste_service);
+    
+                echo "<div class='alert alert-success'>";
+                echo  "<p> Nouvel enregistrement crée avec success </p>";
+                echo " </div>";
+    
+                exit;
+            } */
+    
+    
+    
+    
+    
+    
+            if ($poste !== NULL  &&  $id_services !== NULL && $num_associe !== NULL && $id_telephone === NULL) {
+    
+    
+                if ($num_associe) {
+    
+    
+                    $req_numero_sim = "SELECT numero_sim FROM carte_sim WHERE id_carte_sim = '$num_associe'";
+                    $execution_req = $db->query($req_numero_sim);
+                    $value_numero = $execution_req->fetch(PDO::FETCH_ASSOC);
+                    $numero_sim = $value_numero['numero_sim'];
+                }
+    
+    
+                $insertion_employe_champ_requis_poste_service_num = " UPDATE Employe SET nom_employe='$nom_employe',prenom_employe='$prenom_employe',matricule_employe='$matricule_employe',poste='$poste',numero_associe='$numero_sim',id_services='$id_services',id_carte_sim='$num_associe'  
+                WHERE  (id_employe ='$id_employe')";   
+      
+                // utilise exec() car aucun résultat n'est renvoyé
+                $db->query($insertion_employe_champ_requis_poste_service_num);
+    
+                echo "<div class='alert alert-success'>";
+                echo  "<p> Nouvel enregistrement crée avec success </p>";
+                echo " </div>";
+    
+                exit;
+            }
+    
+    
+            if ($poste !== NULL  &&  $num_associe !== NULL) {
+    
+    
+                if ($num_associe) {
+    
+    
+                    $req_numero_sim = "SELECT numero_sim FROM carte_sim WHERE id_carte_sim = '$num_associe'";
+                    $execution_req = $db->query($req_numero_sim);
+                    $value_numero = $execution_req->fetch(PDO::FETCH_ASSOC);
+                    $numero_sim = $value_numero['numero_sim'];
+                }
+    
+    
+                $insertion_employe_avec_numero_associe_poste = " UPDATE Employe SET nom_employe='$nom_employe',prenom_employe='$prenom_employe',matricule_employe='$matricule_employe',poste='$poste',numero_associe='$numero_sim',id_carte_sim='$num_associe' WHERE  (id_employe ='$id_employe')";
+                // utilise exec() car aucun résultat n'est renvoyé
+                $db->query($insertion_employe_avec_numero_associe_poste);
+    
+                echo "<div class='alert alert-success'>";
+                echo  "<p> Nouvel enregistrement crée avec success </p>";
+                echo " </div>";
+    
+                exit;
+            }
+    
+    
+            if ($poste !== NULL  &&  $id_telephone !== NULL) {
+    
+    
+    
+    
+    
+                $insertion_employe_avec_numero_associe_poste = " UPDATE Employe SET nom_employe='$nom_employe',prenom_employe='$prenom_employe',matricule_employe='$matricule_employe',poste='$poste',id_telephone='$id_telephone'  WHERE  (id_employe ='$id_employe')"; 
+                // utilise exec() car aucun résultat n'est renvoyé
+                $db->query($insertion_employe_avec_numero_associe_poste);
+    
+                echo "<div class='alert alert-success'>";
+                echo  "<p> Nouvel enregistrement crée avec success </p>";
+                echo " </div>";
+    
+                exit;
+            }
+    
+    
+    
+    
+    
+            if ($id_services === NULL) {
+                $insertion_employe_sans_service = " UPDATE Employe SET nom_employe='$nom_employe',prenom_employe='$prenom_employe',matricule_employe='$matricule_employe',poste='$poste' 
+           WHERE  (id_employe ='$id_employe')";
+                // utilise exec() car aucun résultat n'est renvoyé
+                $db->query($insertion_employe_sans_service);
+    
+                echo "<div class='alert alert-success'>";
+                echo  "<p> Nouvel enregistrement crée avec success </p>";
+                echo " </div>";
+    
+                exit;
+            }
+    
+            if ($num_associe === NULL) {
+                $insertion_employe_sans_numero_associe = " UPDATE Employe SET nom_employe='$nom_employe',prenom_employe='$prenom_employe',matricule_employe='$matricule_employe',poste='$poste'
+            WHERE  (id_employe ='$id_employe')";
+                // utilise exec() car aucun résultat n'est renvoyé
+                $db->query($insertion_employe_sans_numero_associe);
+    
+                echo "<div class='alert alert-success'>";
+                echo  "<p> Nouvel enregistrement crée avec success </p>";
+                echo " </div>";
+    
+                exit;
+            }
+    
+            if ($id_telephone === NULL) {
+                $insertion_employe_sans_telephone = "  UPDATE Employe SET nom_employe='$nom_employe',prenom_employe='$prenom_employe',matricule_employe='$matricule_employe',poste='$poste',id_services='$id_services'   WHERE  (id_employe ='$id_employe')";
+                // utilise exec() car aucun résultat n'est renvoyé
+                $db->query($insertion_employe_sans_telephone);
+    
+                echo "<div class='alert alert-success'>";
+                echo  "<p> Nouvel enregistrement crée avec success </p>";
+                echo " </div>";
+    
+                exit;
+            }
+
+    
+
+
+
+
+
+
+
+            $update_all_employe = " UPDATE  Employe SET nom_employe= '$nom_employe', prenom_employe='$prenom_employe' ,matricule_employe='$matricule_employe', poste='$poste',numero_associe ='$numero_sim', id_services='$id_services' , id_telephone='$id_telephone',id_carte_sim='$num_associe'  WHERE  (id_employe ='$id_employe') ";
 
             // utilise exec() car aucun résultat n'est renvoyé
 
@@ -358,5 +507,6 @@ $execution_req = $db->query($req_carte_sim);
             echo "<div class='alert alert-success'>";
             echo " Modifié avec success ";
             echo " </div>";
-        }
     }
+}
+    

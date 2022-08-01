@@ -35,11 +35,11 @@ $execution_req_sql_restant = $db->query($req_sql_solde_restant);
                                 </div>
 
                                 <div class="form-group">
-                                    <label class=" col-sm-4 control-label">CARTE SIM:</label>
+                                    <label class=" col-sm-4 control-label">CARTE SIM :</label>
                                     <div class="col-sm-6">
                                         <select name="id_carte_sim" class="form-control" value="<?php echo $_GET['numero_sim']  ?>">
 
-                                            /* affiche les id des cartes sim avec les numero corespondant *\
+                                            /* affiche les id des cartes sim avec les numeros corespondant *\
 
                                             <?php while ($row = $execution_req_sql_restant->fetch(PDO::FETCH_ASSOC)) : ?>
 
@@ -57,16 +57,16 @@ $execution_req_sql_restant = $db->query($req_sql_solde_restant);
                                 </div>
 
                                 <div class="form-group">
-                                    <label class=" col-sm-4 control-label">SOLDE DATA RESTANT :</label>
-                                    <div class="col-sm-8">
-                                        <input type="text" class="form-control" name="sr_data" id="sr_data" value="<?php echo $_GET['sr_data']  ?>">
+                                    <label class=" col-sm-4 control-label">DATA :</label>
+                                    <div class="col-sm-6">
+                                        <input type="text" class="form-control" name="sr_data" id="sr_data" pattern="[0-9]+" value="<?php echo $_GET['sr_data']  ?>">
                                     </div>
                                 </div>
 
                                 <div class="form-group">
-                                    <label class=" col-sm-4 control-label">SOLDE SMS RESTANT :</label>
-                                    <div class="col-sm-8">
-                                        <input type="text" class="form-control" name="sr_sms" id="sr_sms" value="<?php echo $_GET['sr_sms']  ?>">
+                                    <label class=" col-sm-4 control-label">SMS :</label>
+                                    <div class="col-sm-6">
+                                        <input type="text" class="form-control" name="sr_sms" id="sr_sms" pattern="[0-9]+" value="<?php echo $_GET['sr_sms']  ?>">
                                     </div>
                                 </div>
 
@@ -78,33 +78,24 @@ $execution_req_sql_restant = $db->query($req_sql_solde_restant);
 
 
                                 <div class="form-group">
-                                    <label class=" col-sm-4 control-label">SOLDE MINUTE RESTANT :</label>
-                                    <div class="col-sm-8">
+                                    <label class=" col-sm-4 control-label">MINUTE :</label>
+                                    <div class="col-sm-6">
 
-                                        <input type="text" class="form-control" name="sr_minute" id="sr_minute" value="<?php echo $_GET['sr_minute']  ?>">
+                                        <input type="text" class="form-control" name="sr_minute" id="sr_minute" pattern="[0-9]+" value="<?php echo $_GET['sr_minute']  ?>">
 
                                     </div>
                                 </div>
-
-
                                 <div class="form-group">
-                                    <label class=" col-sm-4 control-label">SOLDE CREDIT RESTANT:</label>
-                                    <div class="col-sm-8">
-                                        <input type="text" class="form-control" name="sr_credit" id="sr_credit" value="<?php echo $_GET['sr_credit']  ?>">
+                                    <label class=" col-sm-4 control-label">CREDIT :</label>
+                                    <div class="col-sm-6">
+                                        <input type="text" class="form-control" name="sr_credit" id="sr_credit" pattern="[0-9]+" value="<?php echo $_GET['sr_credit']  ?>">
                                     </div>
                                 </div>
 
-                                <div class="form-group">
-                                    <label class=" col-sm-4 control-label">DATE :</label>
-                                    <div class="col-sm-8">
-                                        <input type="date" class="form-control" name="dates" id="dates" value="<?php echo $_GET['dates']  ?>">
-
-                                    </div>
-                                </div>
                             </div><!--  /col-xs-5>-->
                             <div class="col-xs-2">
                                 <p>
-                                    <button type="submit" class="btn btn-primary" name="enregistrer_restant">Valider </button>
+                                    <button type="submit" class="btn btn-primary" name="enregistrer">Valider </button>
                                 </p>
 
                             </div>
@@ -141,41 +132,56 @@ $execution_req_sql_restant = $db->query($req_sql_solde_restant);
 
 
 
-    if (isset($_POST['enregistrer_restant'])) {
+    if (isset($_POST['enregistrer'])) {
 
 
-        /* $id= $_GET['id_employe'];
-   $service= $_POST['nom_employe'];
-   $prenom = $_POST['prenom_employe'];
-   $maticule = $_POST['matricule_employe'];
-   $poste = $_POST['poste'];
-   */
+        if (isset($_GET['id_solde_rest']) && isset($_POST['id_carte_sim']) && isset($_POST['sr_data']) && isset($_POST['sr_data']) && isset($_POST['sr_data']) && isset($_POST['sr_sms']) && isset($_POST['sr_minute']) && isset($_POST['sr_credit'])) {
 
-        $id_solde_rest = $_GET['id_solde_rest'];
-        $cartesim = $_POST['id_carte_sim'];
-        $data_restant = $_POST['sr_data'];
-        $sms_restant = $_POST['sr_sms'];
-        $minute_restante = $_POST['sr_minute'];
-        $credit_restant = $_POST['sr_credit'];
-        $dates = $_POST['dates'];
+            $id_solde_rest = $_GET['id_solde_rest'];
+            $carte_sim = htmlspecialchars($_POST['id_carte_sim']);
+            $solde_rest_data = htmlspecialchars($_POST['sr_data']);
+            $solde_rest_sms = htmlspecialchars($_POST['sr_sms']);
+            $solde_rest_minute = htmlspecialchars($_POST['sr_minute']);
+            $solde_rest_credit = htmlspecialchars($_POST['sr_credit']);
+
+            $regex_solde_rest_data = preg_match_all('/[0-9]+/', $solde_rest_data);
+            $regex_solde_rest_sms = preg_match_all('/[0-9]+/', $solde_rest_sms);
+            $regex_solde_rest_minute = preg_match_all('/[0-9]+/', $solde_rest_minute);
+            $regex_solde_rest_credit = preg_match_all('/[0-9]+/', $solde_rest_credit);
+
+            $int_positif_rest_data = (is_int($solde_rest_data) || ctype_digit($solde_rest_data)) && ((int)$solde_rest_data > 0);
+            $int_positif_rest_sms = (is_int($solde_rest_sms) || ctype_digit($solde_rest_sms)) && ((int)$solde_rest_sms > 0);
+            $int_positif_rest_minute = (is_int($solde_rest_minute) || ctype_digit($solde_rest_minute)) && ((int)$solde_rest_minute > 0);
+            $int_positif_rest_credit = (is_int($solde_rest_credit) || ctype_digit($solde_rest_credit)) && ((int)$solde_rest_credit > 0);
+
+            if (($regex_solde_rest_data && $int_positif_rest_data) && ($regex_solde_rest_sms && $int_positif_rest_sms) && ($regex_solde_rest_minute && $int_positif_rest_minute) && ($regex_solde_rest_credit && $int_positif_rest_credit)) {
 
 
-        if (isset($_GET['id_solde_rest']) && isset($_POST['id_carte_sim']) && isset($_POST['sr_data']) && isset($_POST['sr_sms']) && isset($_POST['sr_minute']) && isset($_POST['sr_credit']) && isset($_POST['dates'])) {
+                $sql = " UPDATE  Solde_restant SET sr_credit= '$solde_rest_credit' ,sr_data = '$solde_rest_data', sr_sms= '$solde_rest_sms' ,sr_minute = '$solde_rest_minute', id_carte_sim='$carte_sim'
+                WHERE  (id_solde_rest = '$id_solde_rest') ";
+                $db->exec($sql);
 
-            $sql = " UPDATE  Solde_restant SET sr_data = '$data_restant' , sr_sms= '$sms_restant' ,sr_minute = '$minute_restante', sr_credit= '$credit_restant' WHERE  (id_solde_rest = '$id_solde_rest') ";
-            // utilise exec() car aucun résultat n'est renvoyé
-            $db->exec($sql);
-            //creation de l'enregistrement
-            echo "<div class='alert alert-success'>";
-            echo " Modifié avec success ";
-            echo " </div>";
-        } elseif (!(isset($_GET['id_solde_rest']) && isset($_POST['id_carte_sim']) && isset($_POST['sr_data']) && isset($_POST['sr_sms']) && isset($_POST['sr_minute']) && isset($_POST['sr_credit']) && isset($_POST['dates']))) {
+                echo "<div class='alert alert-success'>";
+                echo " Modifié avec success ";
+                echo " </div>";
+            } else {
+                echo "<div class='alert alert-danger'>";
+                echo "  Modification refusé   ";
+                echo " </div>";
+            }
+        } elseif (!(isset($_GET['id_solde_rest']) && isset($_POST['id_carte_sim']) && isset($_POST['sr_data']) && isset($_POST['sr_sms']))) {
 
             echo "<div class='alert alert-danger'>";
-            echo "  Modification refusé   ";
+            echo  " Nouvel enregistrement refusé   <br>";
             echo " </div>";
         }
     }
+
+
+
+       
+        
+
 
 
 
@@ -196,15 +202,15 @@ $cartesim = $_POST['id_carte_sim'];
 
 
 if(isset($_POST['s_data']) && isset($_POST['s_sms']) && isset($_POST['s_minute'])
-&& isset($_POST['date_dexpi']) && isset($_POST['s_credit'])  && isset($_POST['id_carte_sim'])) {
-   
-   $sql1 = " UPDATE Solde set s_data='".$data."',s_sms='".$sms."',s_minute='".$minute."',date_dexpi='".$dateexpi."',s_credit='".$credit."',id_carte_sim='".$cartesim."'  where (id_solde ='".$id."') ";
-       // utilise exec() car aucun résultat n'est renvoyé
-       $db->exec($sql);
-       //creation de l'enregistrement
-       echo " Nouvel enregistrement crée avec succes ";
-   } else {
-       echo " Nouvel enregistrement refusé ";
-       
-   }
+ && isset($_POST['date_dexpi']) && isset($_POST['s_credit'])  && isset($_POST['id_carte_sim'])) {
+    
+    $sql1 = " UPDATE Solde set s_data='".$data."',s_sms='".$sms."',s_minute='".$minute."',date_dexpi='".$dateexpi."',s_credit='".$credit."',id_carte_sim='".$cartesim."'  where (id_solde ='".$id."') ";
+        // utilise exec() car aucun résultat n'est renvoyé
+        $db->exec($sql);
+        //creation de l'enregistrement
+        echo " Nouvel enregistrement crée avec succes ";
+    } else {
+        echo " Nouvel enregistrement refusé ";
+        
+    }
 }*/

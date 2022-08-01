@@ -42,14 +42,14 @@ $execution_req = $db->query($req_carte_sim);
 
 
                                 <div class="form-group">
-                                    <label class=" col-sm-4 control-label">NOM EMPLOYE:</label>
+                                    <label class=" col-sm-4 control-label">NOM :</label>
                                     <div class="col-sm-8">
                                         <input type="text" class="form-control" name="nom_employe" id="nom_employe" pattern="^[A-Z0-9]+$/^([A-Z0-9]+-)*+$/i" required>
                                     </div>
                                 </div>
 
                                 <div class="form-group">
-                                    <label class=" col-sm-4 control-label">PRENOM EMPLOYE:</label>
+                                    <label class=" col-sm-4 control-label">PRENOM :</label>
                                     <div class="col-sm-8">
                                         <input type="text" class="form-control" name="prenom_employe" id="prenom_employe" pattern="^[A-Z0-9]+$/^([A-Z0-9]+-)*+$/i" required>
                                     </div>
@@ -81,7 +81,7 @@ $execution_req = $db->query($req_carte_sim);
                                 </div>
 
                                 <div class="form-group">
-                                    <label class=" col-sm-4 control-label">NOM SERVICE:</label>
+                                    <label class=" col-sm-4 control-label">SERVICE:</label>
                                     <div class="col-sm-8">
                                         <select name="id_services" class="form-control">
                                             <option disabled selected value> Selectionner un service </option>
@@ -106,7 +106,7 @@ $execution_req = $db->query($req_carte_sim);
 
 
                                 <div class="form-group">
-                                    <label class=" col-sm-4 control-label">NUMERO ASSOCIE:</label>
+                                    <label class=" col-sm-4 control-label">NUMERO :</label>
                                     <div class="col-sm-8">
                                         <select name="num_associe" class="form-control">
                                             <option disabled selected value> Selectionner un numéro </option>
@@ -152,14 +152,7 @@ $execution_req = $db->query($req_carte_sim);
                                 </div>
 
 
-                                <div class="form-group">
-                                    <label class=" col-sm-4 control-label">DATE:</label>
-                                    <div class="col-sm-8">
-                                        <input type="date" class="form-control" name="dates" id="dates">
 
-                                    </div>
-
-                                </div>
 
 
 
@@ -209,12 +202,12 @@ $execution_req = $db->query($req_carte_sim);
         $id_services = array_key_exists("id_services", $_POST) === true ? $_POST['id_services'] : NULL;
         $num_associe = array_key_exists("num_associe", $_POST) === true ? $_POST['num_associe'] : NULL;
         $id_telephone = array_key_exists("id_telephone", $_POST) === true ? $_POST['id_telephone'] : NULL;
-        $dates = $_POST['dates'];
+
 
 
         if (
             isset($_POST['nom_employe']) && isset($_POST['prenom_employe'])
-            && isset($_POST['matricule_employe']) && isset($_POST['dates'])
+            && isset($_POST['matricule_employe'])
         ) {
 
             $nom = htmlspecialchars($_POST['nom_employe']);
@@ -299,11 +292,9 @@ $execution_req = $db->query($req_carte_sim);
             }
 
 
-            $dates = htmlspecialchars($_POST['dates']);
-            /*  $dates = $_POST['dates'];
-            $verif_dates = date_parse(($dates));
-            var_dump($verif_dates); */
-            $dates = date('Y-m-d', strtotime($dates));
+            /*     $dates = htmlspecialchars($_POST['dates']);
+          
+            $dates = date('d-m-Y', strtotime($dates));
 
             if ($_POST['dates'] === $dates) {
                 $operation_date = "Ok";
@@ -311,7 +302,7 @@ $execution_req = $db->query($req_carte_sim);
             } else {
 
                 array_push($tab_error, 'Date incorrect');
-            }
+            } */
 
 
             //bon format à utilser
@@ -346,7 +337,7 @@ $execution_req = $db->query($req_carte_sim);
                 exit;
             }
         } elseif (!(isset($_POST['nom_employe']) && isset($_POST['prenom_employe'])
-            && isset($_POST['matricule_employe']) && isset($_POST['dates']))) {
+            && isset($_POST['matricule_employe']))) {
 
 
             echo "<div class='alert alert-danger'>";

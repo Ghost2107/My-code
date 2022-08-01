@@ -50,14 +50,6 @@ require_once "template.php";
                                     </div>
                                 </div>
 
-                                <div class="form-group">
-
-                                    <div class="col-sm-8">
-
-
-
-                                    </div>
-                                </div>
 
 
 
@@ -91,7 +83,7 @@ require_once "template.php";
     <?php
 
 
-    $sql = null;
+  
     $tab_error = [];
     $tab_success = [];
 
@@ -101,7 +93,7 @@ require_once "template.php";
     if (isset($_POST['enregistrer'])) {
 
 
-        if (isset($_POST['matricule']) && isset($_POST['marque'])) {
+        if (isset($_POST['matricule']) && !empty($_POST['matricule']) && isset($_POST['marque']) && !empty($_POST['marque'])) {
 
             $matricule = htmlspecialchars($_POST['matricule']);
 
@@ -179,10 +171,17 @@ require_once "template.php";
 
 
             }
-        } elseif ($_POST['matricule'] === " " || $_POST['matricule'] === "0" || $_POST['marque']  === " " || $_POST['marque']  === "0") {
+
+         
 
 
-            array_push($tab_error, 'Champ vide');
+        } elseif (!(isset($_POST['matricule'])  && isset($_POST['marque'])  && isset($_POST['dates']))) {
+
+
+           
+            echo "<div class='alert alert-danger'>";
+            echo  " Nouvel enregistrement refusé   <br>";
+            echo " </div>";
         }
 
         $verif_telephone = $db->prepare("SELECT matricule FROM telephone WHERE matricule='$matricule' ");
