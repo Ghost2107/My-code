@@ -1,0 +1,33 @@
+  //verifie s'il y a au moins un chiffre ou caractère special dans une variable
+        $number = !(preg_match_all("/^[a-zA-Z]+$/", $variable));
+   
+
+ //verifie si le nom contient (-) à la fin ou au debut ou seulement (-)
+                $number = (preg_match_all("/^([a-z0-9]+-)*[a-z0-9]+$/i", $variable));
+                
+
+//verifie si le nom contient (_) à la fin ou au debut ou seulement (_)
+                $number2 = (preg_match_all("/^([a-z0-9]+_)*[a-z0-9]+$/i", $variable));
+
+//verifie si un montant ou nombre est un entier positif (0 est pris en compte comme entier positfif) FAIBLE 
+if(preg_match_all('/^\d+$/',$variable);
+
+//fonction qui verfifie si un nombre est un entier positif (0 n'est pas pris en compte)NIVEAU EXPERT
+$verif_montant_int_positif = (is_int($variable);) || ctype_digit($variable);)) && (int)$variable); > 0 ;
+
+//accepte les chaines de caractères avec (-) et (_) à l'interieur 
+pattern ="[A-Za-z]+/^([a-z0-9{20}]+-)*+$/"
+
+
+            //verifie si le nom de la marque contient (-) à la fin ou au debut ou seulement (-) et empeche les espaces vides
+            $verif_hippen_marque = (preg_match_all("/^([a-z0-9]+-)*[a-z0-9]+$/", $variable);
+
+            //verifie si le nom de la marque contient (_) à la fin ou au debut ou seulement (_) et empeche les espaces vides
+            $verif_underscore_marque = (preg_match_all("/^([a-z0-9]+_)*[a-z0-9]+$/", $variable);
+
+            //verifie si le nom de la marque contient (/) à la fin ou au debut ou seulement (/)
+            $verif_slash_marque = (preg_match_all("/^([a-z0-9]+\/)*[a-z0-9]+$/", $variable);
+
+
+// REGEX ALPHANUMERIQUE
+regex_alpha_numeric = (preg_match_all("/^[A-Z0-9]+$/",$variable);
